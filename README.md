@@ -1,9 +1,7 @@
-# Written by Simon Knapen on 12/22/2019 knapen@ias.edu
-# Tested with Pythia 8.243 on a scientific Linux system (CentOS 5.5)
+Written by Simon Knapen on 12/22/2019 knapen@ias.edu
+Tested with Pythia 8.243 on a scientific Linux system (CentOS 5.5)
 
-######################################################
 # Contains
-######################################################
 
 - suep_shower.cc: algorithm modeling the dark sector shower
 - suep_shower.h: header file corresponding to softbomb.cc
@@ -12,18 +10,14 @@
 - Makefile_example and Makefile_example.inc: example Makefiles (do not use for complication, see compilation instructions)
 - README file
 
-######################################################
 # Needs
-######################################################
 
 - Pythia 8
 - c++11
 - boost library
 - HEPMC2 (optional)
 
-######################################################
 # Description
-######################################################
 
 The suep_main.cc is an example script to generate events for strongly coupled, quasi-conformal hidden valleys (softbomb/SUEP). See hep-ph:1612.00850 for description of a of the model. The event generation happens in 3 stages:
 
@@ -35,9 +29,7 @@ The suep_main.cc is an example script to generate events for strongly coupled, q
 
 The output is provided in HEPMC2 format, though this can be changed by modifying both suep_main.cc and the Makefile. 
 
-#######################################################
 # Compilation instructions
-#######################################################
 
 0) Make sure you have a working copy of Pythia 8 as well as the boost libraries, with their paths configured. For example, the relevant lines in my own .bash_profile script are
 
@@ -71,9 +63,7 @@ endif
 
 4) ./suep_main
 
-########################################################
 # Usage 
-########################################################
 
 Run
 
@@ -92,9 +82,7 @@ Please check that your choice for the decays is kinematically compatible with yo
 
 This manner of providing the model parameters can of course be changed by modifying the relevant part of the main_suep.cc script.
 
-########################################################
 # Warnings, regime of validity and known issues
-########################################################
 
 - The ratio of the parameters m and T (m/T) should be an O(1) number. For m/T>>1 and m/T<<1 the theoretical description of the shower is likely not valid.
 
