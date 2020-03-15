@@ -112,6 +112,7 @@ int main(int argc, char *argv[]) {
   pythiaProd.readString("HiggsSM:all = on");
   pythiaProd.readString("25:mayDecay = off"); // turn off SM decays for Higgs
   pythiaProd.readString("25:m0 = "+tostr(mh)); // set the mass of "Higgs" scalar
+  pythiaProd.readString("Random:setSeed = on");
   pythiaProd.readString("Random:seed = "+seed); 
   pythiaProd.readString("Next:numberShowEvent = 0");
   // For debugging only
@@ -122,6 +123,7 @@ int main(int argc, char *argv[]) {
   
   
   //Settings for the decay Pythia object, to decay the dark mesons. Asigned PDG code 999999 for the dark mesons
+  pythiaDecay.readString("Random:setSeed = on");
   pythiaDecay.readString("Random:seed = "+seed);  
   pythiaDecay.readString("999999:all = GeneralResonance void 0 0 0 "+tostr(mX)+" 0.001 0.0 0.0 0.0");
   pythiaDecay.readString("Next:numberShowEvent = 0");
