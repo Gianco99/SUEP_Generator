@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
     return 0;
   }
      
-  
+
   // model parameters and settings
   float mh, mX,T;
   string seed, filename, cardfilename;    
@@ -95,7 +95,7 @@ int main(int argc, char *argv[]) {
   seed=tostr(argv[6]);    
   
   // number of events    
-  int Nevents=100;    
+  int Nevents=10000;    
     
   // Interface for conversion from Pythia8::Event to HepMC event.
   HepMC::Pythia8ToHepMC ToHepMC;
@@ -135,7 +135,7 @@ int main(int argc, char *argv[]) {
   pythiaDecay.readString("Check:event = off");
   
   // get the decay channels from the decay.cmnd card    
-  pythiaDecay.readFile("decay_cards/"+cardfilename);
+  pythiaDecay.readFile(cardfilename);
   //pythiaDecay.readFile("decay_cards/"+cardfilename); 
   pythiaDecay.init();
        
