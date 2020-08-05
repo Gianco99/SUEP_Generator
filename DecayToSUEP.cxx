@@ -1,93 +1,10 @@
-/*
-  Copyright (C) 2020 CERN for the benefit of the ATLAS collaboration
-*/
-
-#include "UserHooksUtils.h"
-#include "UserSetting.h"
-#include "Pythia8_i/UserHooksFactory.h"
-#include "boost/lexical_cast.hpp"
-#include "boost/bind.hpp"
-#include <boost/math/tools/roots.hpp>
-#include <math.h>
-#include <stdexcept>
-#include <iostream>
-
+#include "DecayToSUEP.h"
 #include "suep_shower.h"
-
-namespace Pythia8{
-  class DecayToSUEP;
-}
-
-Pythia8_UserHooks::UserHooksFactory::Creator<Pythia8::DecayToSUEP> DecayToSUEPCreator("DecayToSUEP");
 
 // Uncomment the following line to enable debug messages to be printed to std::cout
 //#define SUEP_DEBUG 1
 
-namespace Pythia8{
-
-  //******************************
-  //** Main UserHook derived class
-  //******************************
-
-  /** Pythia8 UserHook to decay a given scalar particle to SUEP. 
-   *
-   * Details on models available on arXiv:1612.00850.
-   * This is an adaption from the available public code at: 
-   * https://gitlab.com/simonknapen/suep_generator 
-   * by Simon Knapen.
-   *
-   */
-  class DecayToSUEP : public UserHooks{
-    
-  public:
-    
-    DecayToSUEP(): 
-      m_pdgId("DecayToSUEP:PDGId", 25), 
-      m_mass("DecayToSUEP:Mass", 125.0),
-      m_darkMesonMass("DecayToSUEP:DarkMesonMass", 1.), 
-      m_darkTemperature("DecayToSUEP:DarkTemperature", 1.) {
-      
-      std::cout<<"**********************************************************"<<std::endl;
-      std::cout<<"*                                                        *"<<std::endl;
-      std::cout<<"*             Enabled SUEP decay UserHook!               *"<<std::endl;
-      std::cout<<"*                                                        *"<<std::endl;
-      std::cout<<"**********************************************************"<<std::endl;
-      
-    }
-    
-    ~DecayToSUEP(){}
-
-    // Enable the call to the user-hook
-    virtual bool canVetoProcessLevel() {
-      return true;
-    }
-
-    /* Actually implement the user hook.
-     *
-     * We slightly abuse this function in the sense that no veto is performed but instead
-     * the hook is used to modify the event record in between the process-level and parton-level steps.
-     * This modification is allowed in the Pythia8 manual, with warning of event consistency that
-     * should pose no harm in this context.
-     */
-    virtual bool doVetoProcessLevel(Event& process);
-
-
-  private:
-
-    /** PDG Id of particle to be decayed to SUEP */
-    Pythia8_UserHooks::UserSetting<int> m_pdgId;
-
-    /** Mass of system decaying [GeV] */
-    Pythia8_UserHooks::UserSetting<double> m_mass;
-
-    /** Dark-meson mass parameter [GeV] */
-    Pythia8_UserHooks::UserSetting<double> m_darkMesonMass;
-
-    /** Temperature parameter [GeV] */
-    Pythia8_UserHooks::UserSetting<double> m_darkTemperature;
-
-  };
-
+namespace Pythia8 {
 
   //******************************
   //** Implementation of DecayToSUEP UserHook
@@ -108,17 +25,17 @@ namespace Pythia8{
 #endif
 
     for (int ii=0; ii < process.size(); ++ii) {
-      if ( (process[ii].id() == m_pdgId(settingsPtr)) and (process[ii].daughter1()!=process[ii].daughter2() && process[ii].daughter1()>0 && process[ii].daughter2()>0) ) {
+      if ( (process[ii].id() == m_pdgId) and (process[ii].daughter1()!=process[ii].daughter2() && process[ii].daughter1()>0 && process[ii].daughter2()>0) ) {
 
 	Vec4 higgs4mom, mesonmom;
 	vector< Vec4 > suep_shower4momenta;	
 	particleFound=true;
 
 	//setup SUEP shower
-	static Suep_shower suep_shower(m_darkMesonMass(settingsPtr), m_darkTemperature(settingsPtr), m_mass(settingsPtr), rndmPtr);
+	static Suep_shower suep_shower(m_darkMesonMass, m_darkTemperature, m_mass, rndmPtr);
 
 #ifdef SUEP_DEBUG
-	std::cout << "[SUEP_DEBUG] " << "Particle (pdgId=" << m_pdgId(settingsPtr) << ", isFinal=True) found. Decaying to SUEP now." << std::endl;
+	std::cout << "[SUEP_DEBUG] " << "Particle (pdgId=" << m_pdgId << ", isFinal=True) found. Decaying to SUEP now." << std::endl;
 #endif
 
 	// First undo decay
@@ -139,10 +56,10 @@ namespace Pythia8{
 	  mesonmom.bst(higgs4mom.px()/higgs4mom.e(),higgs4mom.py()/higgs4mom.e(), higgs4mom.pz()/higgs4mom.e());
             
 	  //append particle to the event. Hidden/dark meson pdg code is 999999.
-	  process.append(999999, 91, ii, 0, 0, 0, 0, 0, mesonmom.px(), mesonmom.py(), mesonmom.pz(), mesonmom.e(), m_darkMesonMass(settingsPtr)); 
+	  process.append(999999, 91, ii, 0, 0, 0, 0, 0, mesonmom.px(), mesonmom.py(), mesonmom.pz(), mesonmom.e(), m_darkMesonMass); 
 
 #ifdef SUEP_DEBUG
-	  std::cout << "[SUEP_DEBUG] " << "Adding dark meson with px=" << mesonmom.px() << ", py=" << mesonmom.py() << ", pz=" << mesonmom.pz() << ", m=" << m_darkMesonMass(settingsPtr) << std::endl;
+	  std::cout << "[SUEP_DEBUG] " << "Adding dark meson with px=" << mesonmom.px() << ", py=" << mesonmom.py() << ", pz=" << mesonmom.pz() << ", m=" << m_darkMesonMass << std::endl;
 #endif
 	}
 
@@ -166,7 +83,7 @@ namespace Pythia8{
     } // loop over particles in the event
 
     if (not particleFound) {
-      std::cout << "[DecayToSUEP] " << "Particle " << m_pdgId(settingsPtr) << " not found. Nothing to decay to SUEP for this event." << std::endl;
+      std::cout << "[DecayToSUEP] " << "Particle " << m_pdgId << " not found. Nothing to decay to SUEP for this event." << std::endl;
     } else {
 #ifdef SUEP_DEBUG      
       std::cout << "[SEUP_DEBUG] " << "All Done for this event." << std::endl;
