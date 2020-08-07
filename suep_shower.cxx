@@ -124,7 +124,7 @@ vector< Vec4 > Suep_shower::generate_shower(){
   
   vector< Vec4 > event;
   double sum_E = 0.0;
-  
+      
   // fill up event record
   while(sum_E<(this->Etot)){
     event.push_back(this->generateFourVector());
@@ -146,10 +146,17 @@ vector< Vec4 > Suep_shower::generate_shower(){
       event[n][i] += correction;
     } 
   }
+  //Shield against an exception in the calculation of "p_scale" further down. If it fails, abort the event.
+  if(Suep_shower::reballance_func(2.0,event)<0.0){
+    // return an empty event, which will then be skipped by the userhook
+    event.clear();
+    return event;
+  }  
   
   // finally, ballance the total energy, without destroying momentum conservation
   tolerance tol = 0.00001;
   double p_scale;
+  
   p_scale = (bisect(boost::bind(&Suep_shower::reballance_func, this, _1, event),0.0,2.0, tol)).first;
   
   for(int n=0;n<len;n++){

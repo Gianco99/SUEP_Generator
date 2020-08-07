@@ -46,6 +46,12 @@ namespace Pythia8 {
 	// Generate the shower, output are 4 vectors in the rest frame of the shower
 	higgs4mom=process[ii].p();
 	suep_shower4momenta=suep_shower.generate_shower();
+      
+    // Veto event if less than 3 particles in the shower, skipt this event
+    if( suep_shower4momenta.size()<3){
+      std::cout << "Skipped event, insufficient particles in the shower or unsuccessful energy conservation\n";
+      return true;
+    }    
 
 	// Loop over hidden sector mesons and append to the event	
 	for (unsigned j = 0; j < suep_shower4momenta.size(); ++j){

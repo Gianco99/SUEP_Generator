@@ -64,8 +64,7 @@ int main(int argc, char *argv[]) {
   // Specify file where HepMC events will be stored.
   HepMC::IO_GenEvent ascii_io(filename, std::ios::out);
 
-  // We will run pythia twice: Once for Higgs production, and once to decay the final state mesons of softbomb.
-  // We therefore need two different pythia objects, each with different settings
+  // pythia object
   Pythia pythia;
   
   //Settings for the Pythia object
@@ -89,9 +88,10 @@ int main(int argc, char *argv[]) {
   pythia.readString("Random:setSeed = on");
   pythia.readString("Random:seed = "+seed); 
   pythia.readString("Next:numberShowEvent = 0");
-  pythia.readString("Random:setSeed = on");
-  pythia.readString("Random:seed = "+seed);  
+  
+  // define the dark meson
   pythia.readString("999999:all = GeneralResonance void 0 0 0 "+tostr(mX)+" 0.001 0.0 0.0 0.0");
+  // this card had the dark photon branching ratios
   pythia.readFile(cardfilename);
   pythia.readString("Check:event = off");
   pythia.readString("Next:numberShowEvent = 0");
@@ -109,7 +109,8 @@ int main(int argc, char *argv[]) {
   Event& event = pythia.event;
   
   // Begin event loop. Generate event. Skip if error.
-  for (int iEvent = 0; iEvent < Nevents; ++iEvent) {
+  int iEvent=0;
+  while (iEvent < Nevents) {
     // Run the event generation
     if (!pythia.next()) {
       cout << " Event generation aborted prematurely, owing to error!\n";
@@ -130,6 +131,8 @@ int main(int argc, char *argv[]) {
     // Write the HepMC event to file. Done with it.
     ascii_io << hepmcevt;
     delete hepmcevt;
+    
+    iEvent++;
 
   // End of event loop.
   }
