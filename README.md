@@ -1,5 +1,6 @@
-Written by Simon Knapen on 12/22/2019 simon.knapen@cern.ch
+README last updated by Simon Knapen on 08/09/2020 simon.knapen@cern.ch
 Tested with Pythia 8.243 on a scientific Linux system (CentOS 5.5)
+Software was written by Simon Knapen (CERN) and Simone Pagan Griso (LBL)
 
 # Contains
 
@@ -91,7 +92,7 @@ This manner of providing the model parameters can of course be changed by modify
 
 # Thanks
 
-- Thanks to Kevin Pedro for suggesting the userhook method.
-- Thanks to Cari Cessarotti, Alexander Lory and Elena Villhauer for beta-testing and useful feedback
+- Thanks to Kevin Pedro for suggesting the userhook method and for providing a working example.
+- Thanks to Cari Cessarotti, Alexander Lory and Elena Villhauer for beta-testing and useful feedback.
 
 
