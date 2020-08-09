@@ -1,6 +1,6 @@
 // This is an example main pythia script to generate to generate a dark sector shower in a strongly coupled, quasi-conformal
 // hidden valley, often referred to as "soft unclustered energy patterns (SUEP)" or "softbomb" events.
-// The code for the dark shower itself is in suep_shower.cc
+// The code for the dark shower itself is in suep_shower.cxx
 
 // The algorithm relies on arXiv:1305.5226. See arXiv:1612.00850 for a description of the model. 
 // Please cite both papers when using this code.
@@ -88,6 +88,9 @@ int main(int argc, char *argv[]) {
   pythia.readString("Random:setSeed = on");
   pythia.readString("Random:seed = "+seed); 
   pythia.readString("Next:numberShowEvent = 0");
+  
+  // for debugging / testing purposes only
+  pythia.readString("PartonLevel:ISR = off");
   
   // define the dark meson
   pythia.readString("999999:all = GeneralResonance void 0 0 0 "+tostr(mX)+" 0.001 0.0 0.0 0.0");

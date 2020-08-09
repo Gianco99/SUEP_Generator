@@ -167,5 +167,11 @@ vector< Vec4 > Suep_shower::generate_shower(){
     event[n].e(std::sqrt(event[n].px()*event[n].px() + event[n].py()*event[n].py() + event[n].pz()*event[n].pz() + (this->m)*(this->m)));
   }
   
+  // check energy conservation violation
+  // float E_test=Etot;
+  // for(int n=0;n<len;n++){
+  //  E_test=E_test-event[n].e();
+  //}
+  // std::cout << setprecision(5) << E_test << "\n";  
   return event;    
 }
