@@ -32,7 +32,7 @@ namespace Pythia8 {
 	particleFound=true;
 
 	//setup SUEP shower
-	static Suep_shower suep_shower(m_darkMesonMass, m_darkTemperature, m_mass, rndmPtr);
+	static Suep_shower suep_shower(m_darkMesonMass, m_darkTemperature, rndmPtr);
 
 #ifdef SUEP_DEBUG
 	std::cout << "[SUEP_DEBUG] " << "Particle (pdgId=" << m_pdgId << ", isFinal=True) found. Decaying to SUEP now." << std::endl;
@@ -45,7 +45,7 @@ namespace Pythia8 {
 
 	// Generate the shower, output are 4 vectors in the rest frame of the shower
 	higgs4mom=process[ii].p();
-	suep_shower4momenta=suep_shower.generate_shower();
+	suep_shower4momenta=suep_shower.generate_shower(higgs4mom.mCalc());
       
     // Veto event if less than 3 particles in the shower, skipt this event
     if( suep_shower4momenta.size()<3){

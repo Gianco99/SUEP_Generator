@@ -39,10 +39,10 @@ class Suep_shower
    * @param energy total energy of decaying system
    * @param rndm random number generator, if any (if not provided will use the rand() function).
    */
-  Suep_shower(double mass, double temperature, double energy, Pythia8::Rndm *rndm = 0);
+  Suep_shower(double mass, double temperature, Pythia8::Rndm *rndm = 0);
   
   /** Generate a shower event, in the rest frame of the showe. */
-  std::vector< Pythia8::Vec4 > generate_shower();
+  std::vector< Pythia8::Vec4 > generate_shower(double energy);
   
  protected: 
 
