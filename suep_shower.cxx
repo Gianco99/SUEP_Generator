@@ -10,10 +10,10 @@ using namespace std;
 using namespace Pythia8;
 
 // constructor
-Suep_shower::Suep_shower(double mass, double temperature, double energy, Pythia8::Rndm *rndm) {
+Suep_shower::Suep_shower(double mass, double temperature, Pythia8::Rndm *rndm) {
   m = mass;
   Temp=temperature;
-  Etot=energy;
+  //Etot=energy;
   rndmEngine = rndm;
   
   A=m/Temp;
@@ -120,8 +120,9 @@ double Suep_shower::reballance_func(double a, const vector< Vec4 > &event){
 }
 
 // generate a shower event, in the rest frame of the shower
-vector< Vec4 > Suep_shower::generate_shower(){
-  
+vector< Vec4 > Suep_shower::generate_shower(double energy){
+  Etot=energy;
+
   vector< Vec4 > event;
   double sum_E = 0.0;
       
