@@ -137,7 +137,7 @@ int main(int argc, char *argv[]) {
   pythia.readString("SigmaTotal:mode = 0");
   pythia.readString("SigmaTotal:sigmaEl = 21.89");
   pythia.readString("SigmaTotal:sigmaTot = 100.309");
-  //pythia.readString("PDF:pSet=LHAPDF6:NNPDF31_nnlo_as_0118"); // Might be the issue with the docker image
+  pythia.readString("PDF:pSet=LHAPDF6:NNPDF31_nnlo_as_0118"); // Might be the issue with the docker image
 
   pythia.readString("UncertaintyBands:doVariations = on");
   pythia.readString("UncertaintyBands:List = {\
